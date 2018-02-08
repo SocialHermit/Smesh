@@ -1,10 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AI : MonoBehaviour {
 
-    private CharacterController cont;
+    public Text text;
+    private string temp;
+    public int health = 0;
+    private Rigidbody cont;
     private Vector3 moveVector;
     private float verticalVel;
 
@@ -12,30 +16,17 @@ public class AI : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        cont = GetComponent<CharacterController>();
+        cont = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (cont.isGrounded)
-        {
-            verticalVel = -1;
+        //transform.position = new Vector3(transform.position.x, transform.position.y, 0);
 
-            if (!cont.isGrounded)
-            {
-                verticalVel = 10;
-            }
-        }
-        else
-        {
-            verticalVel -= 14 * Time.deltaTime;
-        }
+        cont.angularVelocity = Vector3.zero;
 
-        moveVector = Vector3.zero;
-        moveVector.y = verticalVel;
-
-        cont.Move(moveVector * Time.deltaTime);
+        text.text = health + "%";
     }
 
 }
