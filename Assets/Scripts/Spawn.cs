@@ -7,8 +7,9 @@ public class Spawn : MonoBehaviour {
     //public GameObject[] players;
     public GameObject spawn;
 
-    public void SpawnPlayer(GameObject c)
+    void OnTriggerEnter(Collider c)
     {
-        c.transform.position = gameObject.transform.position;
+        print("boink");
+        c.transform.position = spawn.transform.position;
     }
 }

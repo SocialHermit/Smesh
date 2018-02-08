@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class fighter : MonoBehaviour
+public class Player : MonoBehaviour
 {
     public float speed = 5.0f;
     public float forwardSpeed = 0.1f;
@@ -24,26 +24,28 @@ public class fighter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //transform.position = new Vector3(transform.position.x, transform.position.y, 0);
-
-        rb.angularVelocity = Vector3.zero;
+        //rb.angularVelocity = Vector3.zero;
 
         x = Input.GetAxis("Horizontal") * Time.deltaTime * speed;
 
         if (Input.GetKeyDown(KeyCode.A))
         {
+            Debug.Log("Left");
             child.transform.rotation = new Quaternion(0, 180, 0, 0);
             x *= -1;
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
+            Debug.Log("Right");
             child.transform.rotation = new Quaternion();
             x *= -1;
         }
 
         transform.Translate(x, 0, 0);
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            Debug.Log("Jump");
             if (jumpCounter != jumpMax)
             {
                 rb.velocity = Vector3.zero;
@@ -52,11 +54,11 @@ public class fighter : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetKeyDown(KeyCode.N))
         {
-            LaunchAttack(attackHitboxes[0], 150f, 500f, 6);
+            LaunchAttack(attackHitboxes[0], 150f, 500f, 6);           
         }
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetKeyDown(KeyCode.M))
         {
             LaunchAttack(attackHitboxes[1], 0f, -1000.0f, 15);
         }
@@ -82,16 +84,26 @@ public class fighter : MonoBehaviour
 
             if (c.transform.position.x < transform.position.x)
             {
-                d *= -1;
-            }
 
-            if (c.transform.tag == "enemy")
+                if (c.transform.tag == "enemy")
+                {
+                    float i = (c.GetComponentInParent<AI>().health / 100.0f) + 0.5f;
+                    Rigidbody r = c.GetComponentInParent<Rigidbody>();
+                    r.velocity = Vector3.zero;
+                    r.AddForce(-d * i, t * i, 0);
+                    c.GetComponentInParent<AI>().health += h;
+                }
+            }
+            else
             {
-                float i = (c.GetComponentInParent<AI>().health / 100.0f) + 0.5f;
-                Rigidbody r = c.GetComponentInParent<Rigidbody>();
-                r.velocity = Vector3.zero;
-                r.AddForce(d * i, t * i, 0);
-                c.GetComponentInParent<AI>().health += h;
+                if (c.transform.tag == "enemy")
+                {
+                    float i = (c.GetComponentInParent<AI>().health / 100.0f) + 0.5f;
+                    Rigidbody r = c.GetComponentInParent<Rigidbody>();
+                    r.velocity = Vector3.zero;
+                    r.AddForce(d * i, t * i, 0);
+                    c.GetComponentInParent<AI>().health += h;
+                }
             }
         }
     }
