@@ -1,2 +1,2 @@
 # Smesh
-Shitty smash bros. clone
+Supersmash bros. clone
